@@ -1,0 +1,45 @@
+<!-- LEFT BAR -->
+<aside id="left-col" class="uk-light uk-visible@m">
+    <div class="left-content-box uk-background-blend-lighten uk-background-secondary uk-background-cover">
+        <img src="https://placeimg.com/640/480/appointment" alt="logo-appointment" class="uk-border-circle profile-img">
+        <h4 class="uk-text-center uk-margin-remove-vertical text-light">Appointments</h4>
+    </div>
+    <div class="left-nav-wrap">
+        <ul class="uk-nav uk-nav-default uk-nav-parent-icon" data-uk-nav>
+            <li class="uk-nav-header">MENU</li>
+            <li><a href="{{urlHome}}"><span data-uk-icon="icon: home" class="uk-margin-small-right"></span>Home</a></li>
+            <!--<li class="uk-parent"><a href="#"><span data-uk-icon="icon: thumbnails" class="uk-margin-small-right"></span>Templates</a>
+                <ul class="uk-nav-sub">
+                    <li><a title="Article" href="https://zzseba78.github.io/Kick-Off/article.html">Article</a></li>
+                    <li><a title="Album" href="https://zzseba78.github.io/Kick-Off/album.html">Album</a></li>
+                    <li><a title="Cover" href="https://zzseba78.github.io/Kick-Off/cover.html">Cover</a></li>
+                    <li><a title="Cards" href="https://zzseba78.github.io/Kick-Off/cards.html">Cards</a></li>
+                    <li><a title="News Blog" href="https://zzseba78.github.io/Kick-Off/newsBlog.html">News Blog</a></li>
+                    <li><a title="Price" href="https://zzseba78.github.io/Kick-Off/price.html">Price</a></li>
+                    <li><a title="Login" href="https://zzseba78.github.io/Kick-Off/login.html">Login</a></li>
+                    <li><a title="Login-Dark" href="https://zzseba78.github.io/Kick-Off/login-dark.html">Login - Dark</a></li>
+                </ul>
+            </li>-->
+        </ul>
+        <ul class="uk-nav uk-nav-default uk-nav-parent-icon left-content-box uk-margin-top">
+            <li class="uk-nav-header">ADMIN</li>
+            {% if "all" in permission or "branch_office" in permission %}
+            <li><a href="{{urlHome}}/branch_office">
+                    <span data-uk-icon="icon: users" class="uk-margin-small-right"></span>Oficinas
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="bar-bottom uk-background-blend-lighten uk-background-secondary uk-background-cover">
+        <ul class="uk-subnav uk-flex uk-flex-center uk-child-width-1-5" data-uk-grid>
+            <li>
+                <a href="{{urlHome}}" class="uk-icon-link" data-uk-icon="icon: home" title="Home" data-uk-tooltip></a>
+            </li>
+            <li>
+                <i class="uk-icon-link" data-uk-tooltip="Sign out" data-uk-icon="icon: sign-out"></i>
+            </li>
+        </ul>
+    </div>
+</aside>
+<!-- /LEFT BAR -->

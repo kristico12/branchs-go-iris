@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.4.2/dist/css/uikit.min.css"/>
+    <!-- custom dashboard -->
+    <link rel="stylesheet" href="/public/css/dashboard.css"/>
+
+    <title>Agenda</title>
+</head>
+<body>
+{% include "./static/topBar.html" %}
+{% include "./static/sideBar.html" %}
+<!-- block content main -->
+<div id="content" data-uk-height-viewport="expand: true">
+    <div class="uk-container uk-container-expand">
+        {% block main %} {% endblock %}
+        {% include "./static/offCanvas.html" %}
+        {% include "./static/footer.html" %}
+    </div>
+</div>
+
+<!-- UIkit JS -->
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.4.2/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.4.2/dist/js/uikit-icons.min.js"></script>
+<!-- AXIOS CDN -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/public/js/dashboard.js"></script>
+<!-- custom script for views -->
+{% block js %} {% endblock %}
+</body>
+</html>

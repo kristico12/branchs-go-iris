@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0"/>
+
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/uikit@latest/dist/css/uikit.min.css"/>
+    <!-- SELECT -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css" rel="stylesheet"/>
+    <!-- DatePicker -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en'
+          rel='stylesheet' type='text/css'/>
+    <link href="/public/vendor/select-picker/css/mdDateTimePicker.css" rel="stylesheet"/>
+    <!-- custom branch office -->
+    <link rel="stylesheet" href="/public/css/branch-office.css"/>
+    <title>Agenda</title>
+</head>
+<body>
+<!--HEADER-->
+<header class="uk-box-shadow-small">
+    <div class="uk-container uk-container-expand">
+        <nav class="uk-navbar" id="navbar" data-uk-navbar>
+            <div class="uk-navbar-left">
+                <a class="uk-navbar-item uk-logo" href="/"><img src="/public/img/login-logo.svg"/></a>
+            </div>
+
+            <div class="uk-navbar-right">
+                <div class="uk-navbar-item">
+                    <a class="uk-navbar-toggle uk-hidden@m" data-uk-toggle data-uk-navbar-toggle-icon
+                       href="/"></a>
+                    <a href="/" class="uk-button uk-button-default uk-visible@m uk-text-muted"><span
+                                data-uk-icon="sign-in"></span>SIGN UP</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+<!--/HEADER-->
+
+<!--AUTHOR-->
+<section class="uk-section uk-section-muted uk-padding-remove-bottom">
+    <div class="uk-container uk-container-small">
+        <header class="uk-text-center">
+            <h1 class="uk-heading-primary">SEDES</h1>
+            <p class="uk-width-3-5 uk-margin-auto">
+                A continuacion encontrara todas nuestras sedes, escoja la sede en la cual se encuentra
+            </p>
+        </header>
+        <div class="uk-flex uk-flex-around">
+            {% if error %}
+            <div>
+                <span class="uk-text-danger">{{ error }}</span>
+            </div>
+            {% endif %}
+            <div>
+                <!-- This is a button toggling the modal -->
+                <button
+                        uk-toggle="target: #modal-save-branch-Office"
+                        class="uk-button uk-button-primary"
+                        type="button">ADD
+                </button>
+            </div>
+        </div>
+        <div class="uk-grid uk-grid-small uk-child-width-1-3@m uk-margin-medium-top uk-grid-match"
+             data-uk-scrollspy="cls: uk-animation-slide-bottom-small; target: > div > .uk-card; delay: 200"
+             data-uk-grid>
+            {% for branch in branchOffices %}
+            <div class="uk-card uk-card-default uk-card-hover uk-flex uk-flex-column"
+                 data-uk-scrollspy-class="uk-animation-slide-left-small">
+                <div class="uk-card-header uk-text-center">
+                    <h4 class="uk-text-bold">{{branch.Address|upper}}</h4>
+                </div>
+                <div class="uk-card-body uk-flex-1">
+                    <div class="uk-flex uk-flex-middle uk-flex-center">
+                        <span style="font-size: 1.5rem; font-weight: 100; line-height: .5em">
+                            {{branch.Province}}-{{branch.City}}
+                        </span>
+                    </div>
+                    <ul>
+                        <li>ENTRADA: {{branch.CheckInTime}}</li>
+                        <li>SALIDA: {{branch.ExitTime}}</li>
+                    </ul>
+                </div>
+                <div class="uk-card-footer">
+                    <a href="/{{branch.Id}}" class="uk-button uk-button-primary uk-width-1-1">Entrar</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- This is the modal -->
+<div id="modal-save-branch-Office" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Agregar</h2>
+        <form>
+            <fieldset class="uk-fieldset">
+                <div class="uk-margin">
+                    <select id="select-province" onchange="HandleOptionSelectProvince(this)">
+                        <option value="">Seleccionar...</option>
+                    </select>
+                    <span class="uk-text-danger" id="errorProvince"></span>
+                </div>
+                <div class="uk-margin">
+                    <select id="select-city"></select>
+                    <span class="uk-text-danger" id="errorCity"></span>
+                </div>
+                <div class="uk-margin">
+                    <input class="uk-input" type="text" placeholder="Direccion" id="inputAddress"/>
+                    <span class="uk-text-danger" id="errorAddress"></span>
+                </div>
+                <div class="uk-margin uk-flex uk-flex-around">
+                    <input class="uk-input" type="time" placeholder="Hora de Entrada" id="inputEntranceHour" disabled />
+                    <button
+                            type="button"
+                            class="uk-button uk-button-primary"
+                            id="dialogOpenEntrance"
+                    >Seleccionar
+                    </button>
+                </div>
+                <span class="uk-text-danger" id="errorCheckInTime"></span>
+                <div class="uk-margin uk-flex uk-flex-around">
+                    <input class="uk-input" type="time" placeholder="Hora de Salida" id="inputExitHour" disabled />
+                    <button
+                            type="button"
+                            class="uk-button uk-button-primary"
+                            id="dialogOpenExit"
+                    >Seleccionar
+                    </button>
+                </div>
+                <span class="uk-text-danger" id="errorExitTime"></span>
+            </fieldset>
+        </form>
+        <span class="uk-text-danger" id="message"></span>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+            <button class="uk-button uk-button-primary" type="button" id="saveBranchOffice">Save</button>
+            <span id="loading" class="uk-hidden" uk-spinner></span>
+        </p>
+    </div>
+</div>
+{% include "./static/footer.html" %}
+<!-- Menu -->
+<div id="offcanvas-nav" data-uk-offcanvas="flip: true; overlay: true">
+    <div class="uk-offcanvas-bar uk-offcanvas-bar-animation uk-offcanvas-slide">
+        <button class="uk-offcanvas-close uk-close uk-icon" type="button" data-uk-close></button>
+        <ul class="uk-nav uk-nav-default">
+            <li class="uk-active"><a href="#">SIGN UP</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- JS FILES UIKIT -->
+<script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit-icons.min.js"></script>
+<!-- AXIOS CDN -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- select -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.js"></script>
+<!-- date picker -->
+<script src="/public/vendor/select-picker/js/moment.min.js"></script>
+<script src="/public/vendor/select-picker/js/draggabilly.pkgd.min.js"></script>
+<script src="/public/vendor/select-picker/js/mdDateTimePicker.js"></script>
+<!-- CUSTOM JS -->
+<script src="/public/js/branch-office-home.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0"/>
+
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/uikit@latest/dist/css/uikit.min.css"/>
+    <!-- custom branch office -->
+    <link rel="stylesheet" href="/public/css/branch-office.css"/>
+    <title>Agenda</title>
+</head>
+<body>
+<!--HEADER-->
+<header class="uk-box-shadow-small">
+    <div class="uk-container uk-container-expand">
+        <nav class="uk-navbar" id="navbar" data-uk-navbar>
+            <div class="uk-navbar-left">
+                <a class="uk-navbar-item uk-logo" href="/"><img src="/public/img/login-logo.svg"/></a>
+            </div>
+        </nav>
+    </div>
+</header>
+<!--/HEADER-->
+
+<!--AUTHOR-->
+<section class="uk-section uk-section-muted uk-padding-remove-bottom">
+    <div class="uk-container uk-container-small">
+        <header class="uk-text-center">
+            <h1 class="uk-heading-primary">{{code}}</h1>
+            <p class="uk-width-3-5 uk-margin-auto">
+                {{message}}
+            </p>
+        </header>
+    </div>
+</section>
+<!-- JS FILES UIKIT -->
+<script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@latest/dist/js/uikit-icons.min.js"></script>
+</body>
+</html>
