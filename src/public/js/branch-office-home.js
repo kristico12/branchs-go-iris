@@ -63,7 +63,7 @@ function SetDataSelectCity(id) {
         insertSelect.add(option);
     }
 }
-window.onload = function () {
+window.addEventListener('load',function () {
     // assing year
     const year = document.querySelector("#year");
     year.innerHTML = new Date().getFullYear().toString();
@@ -82,7 +82,7 @@ window.onload = function () {
             SetFilterProvince();
             SetDataSelectProvince();
         })
-};
+});
 function HandleOptionSelectProvince() {
     const selected = selectProvince.selected();
     if (selected !== "") {

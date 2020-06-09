@@ -8,9 +8,12 @@
 
     <!-- UIkit CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.4.2/dist/css/uikit.min.css"/>
+    <!-- Pagination -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
     <!-- custom dashboard -->
     <link rel="stylesheet" href="/public/css/dashboard.css"/>
-
+    <!-- custom css to views dashboard -->
+    {% block css %} {% endblock %}
     <title>Agenda</title>
 </head>
 <body>
@@ -30,6 +33,9 @@
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.4.2/dist/js/uikit-icons.min.js"></script>
 <!-- AXIOS CDN -->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- PAGINATION -->
+<script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+<!-- CUSTOM DASHBOARD -->
 <script src="/public/js/dashboard.js"></script>
 <!-- custom script for views -->
 {% block js %} {% endblock %}

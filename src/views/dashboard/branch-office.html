@@ -7,12 +7,13 @@
                 <div class="uk-card uk-card-default uk-card-small uk-card-hover">
                     <div class="uk-card-header">
                         <div class="uk-grid uk-grid-small">
-                            <div class="uk-width-auto"><h4>Oficinas</h4></div>
+                            <div class="uk-width-auto"><h4>Listado</h4></div>
                         </div>
                     </div>
                     <div class="uk-card-body">
-                        <div class="chart-container">
-                            <table class="uk-table uk-table-responsive uk-table-striped uk-table-hover" id="tableBranchOffice">
+                        <div class="chart-container uk-overflow-auto">
+                            <table class="uk-table uk-table-responsive uk-table-striped uk-table-hover"
+                                   id="tableBranchOffice">
                                 <thead>
                                 <tr>
                                     {% for attr in listAttributes %}
@@ -24,7 +25,64 @@
                                 <tbody>
                                 </tbody>
                             </table>
-                            <span class="uk-text-danger" id="errorBranchOffice"></span>
+                            <div id="pagination" class="tui-pagination"></div>
+                            <span class="uk-text-danger" id="errorList"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-1-1@l">
+                <div class="uk-card uk-card-default uk-card-small uk-card-hover">
+                    <div class="uk-card-header">
+                        <div class="uk-width-auto"><h4>Agregar</h4></div>
+                    </div>
+                    <div class="uk-card-body">
+                        <div class="chart-container uk-overflow-auto">
+                            <form>
+                                <fieldset class="uk-fieldset">
+                                    <div class="uk-margin">
+                                        <select id="select-province" onchange="HandleOptionSelectProvince(this)">
+                                            <option value="">Seleccionar...</option>
+                                        </select>
+                                        <span class="uk-text-danger" id="errorProvince"></span>
+                                    </div>
+                                    <div class="uk-margin">
+                                        <select id="select-city"></select>
+                                        <span class="uk-text-danger" id="errorCity"></span>
+                                    </div>
+                                    <div class="uk-margin">
+                                        <input class="uk-input" type="text" placeholder="Direccion" id="inputAddress"/>
+                                        <span class="uk-text-danger" id="errorAddress"></span>
+                                    </div>
+                                    <div class="uk-margin uk-flex uk-flex-around">
+                                        <input class="uk-input" type="time" placeholder="Hora de Entrada"
+                                               id="inputEntranceHour" disabled/>
+                                        <button
+                                                type="button"
+                                                class="uk-button uk-button-primary"
+                                                id="dialogOpenEntrance"
+                                        >Seleccionar
+                                        </button>
+                                    </div>
+                                    <span class="uk-text-danger" id="errorCheckInTime"></span>
+                                    <div class="uk-margin uk-flex uk-flex-around">
+                                        <input class="uk-input" type="time" placeholder="Hora de Salida"
+                                               id="inputExitHour" disabled/>
+                                        <button
+                                                type="button"
+                                                class="uk-button uk-button-primary"
+                                                id="dialogOpenExit"
+                                        >Seleccionar
+                                        </button>
+                                    </div>
+                                    <span class="uk-text-danger" id="errorExitTime"></span>
+                                </fieldset>
+                            </form>
+                            <span class="uk-text-danger" id="message"></span>
+                            <p class="uk-text-right">
+                                <button class="uk-button uk-button-primary" type="button" id="saveBranchOffice">Save</button>
+                                <span id="loading" class="uk-hidden" uk-spinner></span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -34,5 +92,20 @@
 </main>
 {% endblock %}
 {% block js %}
+<!-- select -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.js"></script>
+<!-- date picker -->
+<script src="/public/vendor/select-picker/js/moment.min.js"></script>
+<script src="/public/vendor/select-picker/js/draggabilly.pkgd.min.js"></script>
+<script src="/public/vendor/select-picker/js/mdDateTimePicker.js"></script>
 <script src="/public/js/branch-office.js"></script>
+<script src="/public/js/branch-office-home.js"></script>
+{% endblock %}
+{% block css %}
+<!-- SELECT -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css" rel="stylesheet"/>
+<!-- DatePicker -->
+<link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en'
+      rel='stylesheet' type='text/css'/>
+<link href="/public/vendor/select-picker/css/mdDateTimePicker.css" rel="stylesheet"/>
 {% endblock %}
