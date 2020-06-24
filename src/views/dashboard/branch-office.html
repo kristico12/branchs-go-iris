@@ -10,24 +10,26 @@
                             <div class="uk-width-auto"><h4>Listado</h4></div>
                         </div>
                     </div>
-                    <div class="uk-card-body">
-                        <div class="chart-container uk-overflow-auto">
-                            <table class="uk-table uk-table-responsive uk-table-striped uk-table-hover"
-                                   id="tableBranchOffice">
-                                <thead>
-                                <tr>
-                                    {% for attr in listAttributes %}
-                                    <td id="{{attr.Key}}">{{attr.Value}}</td>
-                                    {% endfor %}
-                                    <td>Opciones</td>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                            <div id="pagination" class="tui-pagination"></div>
-                            <span class="uk-text-danger" id="errorList"></span>
-                        </div>
+                    <div class="uk-card-body uk-overflow-auto">
+                        <form class="uk-margin uk-flex uk-flex-around">
+                            <input class="uk-input" type="text" placeholder="Filtrar" id="search"/>
+                            <button class="uk-button uk-button-primary" type="button" id="btnSearch">Filtrar</button>
+                        </form>
+                        <table class="uk-table uk-table-responsive uk-table-striped uk-table-hover"
+                               id="tableBranchOffice">
+                            <thead>
+                            <tr>
+                                {% for attr in listAttributes %}
+                                <td id="{{attr.Key}}">{{attr.Value}}</td>
+                                {% endfor %}
+                                <td>Opciones</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div id="pagination" class="tui-pagination"></div>
+                        <span class="uk-text-danger" id="errorList"></span>
                     </div>
                 </div>
             </div>
@@ -36,60 +38,112 @@
                     <div class="uk-card-header">
                         <div class="uk-width-auto"><h4>Agregar</h4></div>
                     </div>
-                    <div class="uk-card-body">
-                        <div class="chart-container uk-overflow-auto">
-                            <form>
-                                <fieldset class="uk-fieldset">
-                                    <div class="uk-margin">
-                                        <select id="select-province" onchange="HandleOptionSelectProvince(this)">
-                                            <option value="">Seleccionar...</option>
-                                        </select>
-                                        <span class="uk-text-danger" id="errorProvince"></span>
-                                    </div>
-                                    <div class="uk-margin">
-                                        <select id="select-city"></select>
-                                        <span class="uk-text-danger" id="errorCity"></span>
-                                    </div>
-                                    <div class="uk-margin">
-                                        <input class="uk-input" type="text" placeholder="Direccion" id="inputAddress"/>
-                                        <span class="uk-text-danger" id="errorAddress"></span>
-                                    </div>
-                                    <div class="uk-margin uk-flex uk-flex-around">
-                                        <input class="uk-input" type="time" placeholder="Hora de Entrada"
-                                               id="inputEntranceHour" disabled/>
-                                        <button
-                                                type="button"
-                                                class="uk-button uk-button-primary"
-                                                id="dialogOpenEntrance"
-                                        >Seleccionar
-                                        </button>
-                                    </div>
-                                    <span class="uk-text-danger" id="errorCheckInTime"></span>
-                                    <div class="uk-margin uk-flex uk-flex-around">
-                                        <input class="uk-input" type="time" placeholder="Hora de Salida"
-                                               id="inputExitHour" disabled/>
-                                        <button
-                                                type="button"
-                                                class="uk-button uk-button-primary"
-                                                id="dialogOpenExit"
-                                        >Seleccionar
-                                        </button>
-                                    </div>
-                                    <span class="uk-text-danger" id="errorExitTime"></span>
-                                </fieldset>
-                            </form>
-                            <span class="uk-text-danger" id="message"></span>
-                            <p class="uk-text-right">
-                                <button class="uk-button uk-button-primary" type="button" id="saveBranchOffice">Save</button>
-                                <span id="loading" class="uk-hidden" uk-spinner></span>
-                            </p>
-                        </div>
+                    <div class="uk-card-body uk-overflow-auto">
+                        <form>
+                            <fieldset class="uk-fieldset">
+                                <div class="uk-margin">
+                                    <select id="select-province" onchange="HandleOptionSelectProvince(this)">
+                                        <option value="">Seleccionar...</option>
+                                    </select>
+                                    <span class="uk-text-danger" id="errorProvince"></span>
+                                </div>
+                                <div class="uk-margin">
+                                    <select id="select-city"></select>
+                                    <span class="uk-text-danger" id="errorCity"></span>
+                                </div>
+                                <div class="uk-margin">
+                                    <input class="uk-input" type="text" placeholder="Direccion" id="inputAddress"/>
+                                    <span class="uk-text-danger" id="errorAddress"></span>
+                                </div>
+                                <div class="uk-margin uk-flex uk-flex-around">
+                                    <input class="uk-input" type="time" placeholder="Hora de Entrada"
+                                           id="inputEntranceHour" disabled/>
+                                    <button
+                                            type="button"
+                                            class="uk-button uk-button-primary"
+                                            id="dialogOpenEntrance"
+                                    >Seleccionar
+                                    </button>
+                                </div>
+                                <span class="uk-text-danger" id="errorCheckInTime"></span>
+                                <div class="uk-margin uk-flex uk-flex-around">
+                                    <input class="uk-input" type="time" placeholder="Hora de Salida"
+                                           id="inputExitHour" disabled/>
+                                    <button
+                                            type="button"
+                                            class="uk-button uk-button-primary"
+                                            id="dialogOpenExit"
+                                    >Seleccionar
+                                    </button>
+                                </div>
+                                <span class="uk-text-danger" id="errorExitTime"></span>
+                            </fieldset>
+                        </form>
+                        <span class="uk-text-danger" id="message"></span>
+                        <p class="uk-text-right">
+                            <button class="uk-button uk-button-primary" type="button" id="saveBranchOffice">Save
+                            </button>
+                            <span id="loading" class="uk-hidden" uk-spinner></span>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
+<!-- This is the modal -->
+<div id="modal-edit-branch-Office" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Editar</h2>
+        <form>
+            <fieldset class="uk-fieldset">
+                <div class="uk-margin">
+                    <input class="uk-input" type="number" placeholder="Id" id="inputEditId" disabled/>
+                </div>
+                <div class="uk-margin">
+                    <select id="edit-select-province" onchange="HandleOptionSelectProvince(this)">
+                        <option value="">Seleccionar...</option>
+                    </select>
+                    <span class="uk-text-danger" id="errorEditProvince"></span>
+                </div>
+                <div class="uk-margin">
+                    <select id="edit-select-city"></select>
+                    <span class="uk-text-danger" id="errorEditCity"></span>
+                </div>
+                <div class="uk-margin">
+                    <input class="uk-input" type="text" placeholder="Direccion" id="inputEditAddress"/>
+                    <span class="uk-text-danger" id="errorEditAddress"></span>
+                </div>
+                <div class="uk-margin uk-flex uk-flex-around">
+                    <input class="uk-input" type="time" placeholder="Hora de Entrada" id="inputEditEntranceHour" disabled />
+                    <button
+                            type="button"
+                            class="uk-button uk-button-primary"
+                            id="dialogEditOpenEntrance"
+                    >Seleccionar
+                    </button>
+                </div>
+                <span class="uk-text-danger" id="errorEditCheckInTime"></span>
+                <div class="uk-margin uk-flex uk-flex-around">
+                    <input class="uk-input" type="time" placeholder="Hora de Salida" id="inputEditExitHour" disabled />
+                    <button
+                            type="button"
+                            class="uk-button uk-button-primary"
+                            id="dialogEditOpenExit"
+                    >Seleccionar
+                    </button>
+                </div>
+                <span class="uk-text-danger" id="errorEditExitTime"></span>
+            </fieldset>
+        </form>
+        <span class="uk-text-danger" id="messageEdit"></span>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+            <button class="uk-button uk-button-primary" type="button" id="editBranchOffice">Save</button>
+            <span id="loading" class="uk-hidden" uk-spinner></span>
+        </p>
+    </div>
+</div>
 {% endblock %}
 {% block js %}
 <!-- select -->

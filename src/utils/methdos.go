@@ -5,10 +5,14 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/joho/godotenv"
+	"golang.org/x/text/transform"
+	"golang.org/x/text/unicode/norm"
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"time"
+	"unicode"
 )
 
 //------------------- client HTTP HEADER --------------------------|
@@ -65,4 +69,15 @@ func SetCookie(data string, name string, duration time.Duration) *http.Cookie {
 	c.Value = url.QueryEscape(data)
 	c.Expires = time.Now().Add(duration)
 	return c
+}
+//-------------------------------- func clear special characters ------------------------------|
+func isMn (r rune) bool {
+	return unicode.Is(unicode.Mn, r) // Mn: nonspacing marks
+}
+func ClearSpecialCharacteres(info string) (string, error) {
+	b := make([]byte,len(info))
+	t := transform.Chain(norm.NFD, transform.RemoveFunc(isMn), norm.NFC)
+	_, _, err := t.Transform(b,[]byte(info),true)
+	if err != nil { return "", err}
+	return strings.ToLower(string(b)), nil
 }

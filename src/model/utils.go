@@ -1,7 +1,10 @@
 package model
 
 import (
+	"fmt"
+	"go-return/src/utils"
 	"golang.org/x/crypto/bcrypt"
+	"strings"
 	"time"
 )
 
@@ -36,4 +39,25 @@ func (self *BranchOffice) MascarateHours(formatEntry string, formatExit string) 
 	t2,_ := time.ParseInLocation(time.RFC3339,self.CheckInTime,loc)
 	self.ExitTime = t1.Format(formatExit)
 	self.CheckInTime = t2.Format(formatEntry)
+}
+func FilterProvinceCity(name string, key string) []string {
+	var code []string
+	for _, value := range provinceCityColombia {
+		var resultClear string
+		if key == "city" {
+			resultClear, _ = utils.ClearSpecialCharacteres(value.City)
+		} else {
+			resultClear, _ = utils.ClearSpecialCharacteres(value.DepartmentName)
+		}
+		name, _ = utils.ClearSpecialCharacteres(name)
+		if strings.Contains(resultClear,name) {
+			if key == "city" {
+				code = append(code,fmt.Sprintf("%s",value.CodiCity))
+			} else {
+				code = append(code,fmt.Sprintf("%s",value.CodiDepartment))
+			}
+		}
+	}
+	fmt.Println(code)
+	return code
 }

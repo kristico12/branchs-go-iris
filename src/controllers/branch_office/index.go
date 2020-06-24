@@ -29,7 +29,7 @@ func IndexGet(ctx iris.Context) {
 func IndexDashboardGet(ctx iris.Context) {
 	var branchOffice model.BranchOffice
 	listAttributes, _ := branchOffice.Select("SELECT column_name FROM information_schema.columns\nWHERE table_catalog = 'Appointment' AND table_name = 'branch_office'")
-	for i,value := range listAttributes {
+	for i, value := range listAttributes {
 		utils.ListAttributesBranchOfficess[i].Key = value
 	}
 	ctx.ViewData("listAttributes", utils.ListAttributesBranchOfficess)
@@ -65,45 +65,61 @@ func ApiPost(ctx iris.Context) {
 func ApiGet(ctx iris.Context) {
 	var (
 		branchOffices model.BranchOffice
-		paginate utils.Paginate
-		query string
-		titleOrder string
-		orderAscDesc string
-		err error
+		paginate      utils.Paginate
+		titleOrder    string
+		orderAscDesc  string
+		filterCity []string
+		filterProvince []string
+		err           error
+		strIn string
 	)
 	// asing id
 	branchOffices.Id, _ = strconv.ParseUint(ctx.URLParam("branchOffice"), 10, 64)
-	query = fmt.Sprintf("WHERE id<>%d",branchOffices.Id)
+	// FILTER
+	if len(ctx.URLParam("filter")) > 0 {
+		filterCity = model.FilterProvinceCity(ctx.URLParam("filter"),"city")
+		filterProvince = model.FilterProvinceCity(ctx.URLParam("filter"), "province")
+		if len(filterCity) > 0 && len(filterProvince) > 0 {
+			strIn = "AND (city IN (?) OR province IN (?))"
+		} else if len(filterCity) > 0 && len(filterProvince) == 0 {
+			strIn = "AND city IN (?)"
+		} else if len(filterCity) == 0 && len(filterProvince) > 0 {
+			strIn = "AND province IN (?)"
+		} else { strIn = "" }
+	}
 	// assign ORDER BY
 	if len(ctx.URLParam("titleOrder")) > 0 {
 		titleOrder = ctx.URLParam("titleOrder")
 	} else { titleOrder = "id" }
-	query = fmt.Sprintf("%s ORDER BY %s",query,titleOrder)
 	// define ASC or DESC
 	if len(ctx.URLParam("orderAscDesc")) > 0 {
 		orderAscDesc = ctx.URLParam("orderAscDesc")
-	} else { orderAscDesc = "ASC"}
-	query = fmt.Sprintf("%s %s",query,orderAscDesc)
+	} else { orderAscDesc = "ASC" }
 	// execute query count
-	count, err := branchOffices.Select(fmt.Sprintf("SELECT count(*) FROM branch_office WHERE id<>%d",branchOffices.Id))
+	count, err := branchOffices.In(
+		fmt.Sprintf("SELECT * FROM branch_office WHERE id<>%d %s",
+			branchOffices.Id, strIn),filterCity,filterProvince)
 	if err != nil {
 		ctx.StatusCode(iris.StatusInternalServerError)
 		ctx.JSON(iris.Map{"message": err.Error()})
 		return
 	}
-	if convInt, err := strconv.Atoi(count[0]); err == nil {
-		paginate.Filtered = uint32(convInt)
-	} else { paginate.Filtered = uint32(0) }
+	paginate.Filtered = uint32(len(count))
 	// execute query paginate
 	if len(ctx.URLParam("page")) > 0 {
 		if convInt, err := strconv.Atoi(ctx.URLParam("page")); err == nil {
 			paginate.Page = uint32(convInt)
-		} else { paginate.Page = uint32(1) }
-	} else { paginate.Page = uint32(1) }
+		} else {
+			paginate.Page = uint32(1)
+		}
+	} else {
+		paginate.Page = uint32(1)
+	}
 	paginate.NumberForPage = utils.NumberForPage
-	query = fmt.Sprintf("%s OFFSET %d ROWS FETCH FIRST %d ROW ONLY",query,
-		(paginate.Page*paginate.NumberForPage) - paginate.NumberForPage, paginate.NumberForPage) // (2 * 7) - 7 inicial
-	result, err := branchOffices.Filter(query)
+	result, err := branchOffices.In(
+		fmt.Sprintf("SELECT * FROM branch_office WHERE id<>%d %s ORDER BY %s OFFSET %d ROWS FETCH FIRST %d ROW ONLY",
+			branchOffices.Id,strIn,titleOrder+" "+orderAscDesc,
+			(paginate.Page*paginate.NumberForPage)-paginate.NumberForPage, paginate.NumberForPage),filterCity,filterProvince)
 	if err != nil {
 		ctx.StatusCode(iris.StatusInternalServerError)
 		ctx.JSON(iris.Map{"message": err.Error()})
