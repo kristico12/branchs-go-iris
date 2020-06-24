@@ -40,6 +40,17 @@ func (self *BranchOffice) MascarateHours(formatEntry string, formatExit string) 
 	self.ExitTime = t1.Format(formatExit)
 	self.CheckInTime = t2.Format(formatEntry)
 }
+func unique(intSlice []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+	for _, entry := range intSlice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
+}
 func FilterProvinceCity(name string, key string) []string {
 	var code []string
 	for _, value := range provinceCityColombia {
@@ -58,6 +69,6 @@ func FilterProvinceCity(name string, key string) []string {
 			}
 		}
 	}
-	fmt.Println(code)
+	code = unique(code)
 	return code
 }

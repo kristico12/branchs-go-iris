@@ -82,6 +82,7 @@ func (self BranchOffice) In(filterIn string, args ...interface{}) ([]BranchOffic
 		if err != nil { return nil, err }
 		filterIn = Db.Rebind(filterIn)
 	} else { args = nil }
+	Db.Select(&result,filterIn,args...)
 	if err != nil { return nil, err }
 	defer Db.Close()
 	return result, nil
