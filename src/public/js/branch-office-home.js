@@ -37,8 +37,8 @@ function SetFilterProvince() {
     filterProvince = Array.from(new Set(AllCities.map(idProv => idProv.CodiDepartment)))
         .map(id => new CitysProvince("", id, AllCities.find(val => id === val.CodiDepartment).DepartmentName, "", ""))
 }
-function SetDataSelectProvince() {
-    let insertSelect = document.querySelector("#select-province");
+function SetDataSelectProvince(idSelect) {
+    let insertSelect = document.querySelector(idSelect);
     for (const province of filterProvince) {
         const option = document.createElement("option");
         option.text = province.DepartmentName;
@@ -46,16 +46,16 @@ function SetDataSelectProvince() {
         insertSelect.add(option);
     }
 }
-function ClearDataCities() {
-    const removeOption = document.querySelectorAll("#select-city option");
+function ClearDataCities(idSelectCity) {
+    const removeOption = document.querySelectorAll(idSelectCity);
     removeOption.forEach(o => o.remove());
 }
-function SetDataSelectCity(id) {
+function SetDataSelectCity(id, idSelectCity) {
     const insertOptionsSelectCitys = AllCities.filter(key => key.CodiDepartment === id).map(key => {
         return { text: key.City, id: key.CodiCity }
     });
     insertOptionsSelectCitys.splice(0,0, { text: "Seleccionar...", id: "" })
-    const insertSelect = document.querySelector("#select-city");
+    const insertSelect = document.querySelector(idSelectCity);
     for (const selectCityElement of insertOptionsSelectCitys) {
         const option = document.createElement("option");
         option.text = selectCityElement.text;
@@ -80,14 +80,14 @@ window.addEventListener('load',function () {
         .then(response => {
             SetValuesAllCities(response.data);
             SetFilterProvince();
-            SetDataSelectProvince();
+            SetDataSelectProvince("#select-province");
         })
 });
 function HandleOptionSelectProvince() {
     const selected = selectProvince.selected();
     if (selected !== "") {
-        ClearDataCities();
-        SetDataSelectCity(selected)
+        ClearDataCities("#select-city option");
+        SetDataSelectCity(selected, "#select-city")
     }
 }
 document.querySelector("#dialogOpenEntrance").addEventListener('click', function () {

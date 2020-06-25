@@ -11,8 +11,8 @@
                         </div>
                     </div>
                     <div class="uk-card-body uk-overflow-auto">
-                        <form class="uk-margin uk-flex uk-flex-around">
-                            <input class="uk-input" type="text" placeholder="Filtrar" id="search"/>
+                        <form class="uk-margin uk-flex uk-flex-around" onsubmit="return false">
+                            <input class="uk-input" type="text" placeholder="Ciudad o Departamento" id="search"/>
                             <button class="uk-button uk-button-primary" type="button" id="btnSearch">Filtrar</button>
                         </form>
                         <table class="uk-table uk-table-responsive uk-table-striped uk-table-hover"
@@ -101,7 +101,7 @@
                     <input class="uk-input" type="number" placeholder="Id" id="inputEditId" disabled/>
                 </div>
                 <div class="uk-margin">
-                    <select id="edit-select-province" onchange="HandleOptionSelectProvince(this)">
+                    <select id="edit-select-province" onchange="HandleOptionEditSelectProvince(this)">
                         <option value="">Seleccionar...</option>
                     </select>
                     <span class="uk-text-danger" id="errorEditProvince"></span>
