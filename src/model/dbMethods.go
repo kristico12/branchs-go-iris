@@ -9,7 +9,7 @@ import (
 //-------------------------- interface model Actions ------------------------------------------|
 type ModelCrud interface {
 	Save() error
-	Update()
+	Update() error
 	Delete()
 	Get() error
 	Filter()
@@ -43,7 +43,18 @@ func (self *BranchOffice) Get(where string, args ...interface{}) error {
 	if err != nil { return err }
 	return nil
 }
-//-------------------------------- all methods Filter-------------------------------------------|
+//-------------------------------- all methods UPDATE ------------------------------------------|
+func (self BranchOffice) Update() error {
+	Db, err := ConnectionDatabase()
+	if err != nil { return err }
+	tx := Db.MustBegin()
+	tx.NamedExec("UPDATE branch_office SET city=:city, province=:province, address=:address, check_in_time=:check_in_time, exit_time=:exit_time WHERE id=:id",self)
+	err = tx.Commit()
+	defer Db.Close()
+	if err != nil { return err }
+	return nil
+}
+//-------------------------------- all methods Filter -------------------------------------------|
 func (self BranchOffice) Filter(where string, args ...interface{}) ([]BranchOffice, error) {
 	var result []BranchOffice
 	Db, err := ConnectionDatabase()

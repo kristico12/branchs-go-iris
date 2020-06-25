@@ -34,5 +34,6 @@ func Routes() *iris.Application {
 	routeApiBranchOffice := routeApi.Party("/branch_office", middlewares.IsPermision)
 	routeApiBranchOffice.Post("/",branch_office.ApiPost)
 	routeApiBranchOffice.Get("/",branch_office.ApiGet)
+	routeApiBranchOffice.Put("/", branch_office.ApiPut)
 	return app
 }

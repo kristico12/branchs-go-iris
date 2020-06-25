@@ -54,6 +54,7 @@ type EmployeeServiceValidator struct {
 	IdService  []*ServiceValidator  `json:"idService" validate:"required,dive,required"`
 }
 type BranchOfficeValidator struct {
+	Id string `json:"id"`
 	City        string `json:"city" validate:"required,min=1,max=50,numeric,customInvalidCodeCity=Province"`
 	Province    string `json:"province" validate:"required,min=1,max=50,numeric,customInvalidCodeProvince"`
 	Address     string `json:"address" validate:"required,min=5"`

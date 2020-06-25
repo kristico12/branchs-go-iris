@@ -16,12 +16,10 @@ let selectCity;
 const dialogTimeEntranceHour = new mdDateTimePicker.default({
     type: 'time',
     trigger: document.querySelector("#inputEntranceHour")
-
 });
 const dialogTimeExitHour = new mdDateTimePicker.default({
     type: 'time',
     trigger: document.querySelector("#inputExitHour")
-
 });
 function capitalize(word) {
     return word[0].toUpperCase() + word.slice(1);

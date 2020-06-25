@@ -91,6 +91,14 @@ document.querySelector("#btnSearch").addEventListener('click', function () {
 //-------------------------------------------------------- CODE FOR EDIT BRANCH --------------------------------------------------------|
 let selectEditProvince;
 let selectEditCity;
+const dialogTimeEditEntranceHour = new mdDateTimePicker.default({
+    type: 'time',
+    trigger: document.querySelector("#inputEditEntranceHour")
+});
+const dialogTimeEditExitHour = new mdDateTimePicker.default({
+    type: 'time',
+    trigger: document.querySelector("#inputEditExitHour")
+});
 function OpenEdit(i) {
     const row = tbody.rows.item(i);
     let editBranchOffice = {};
@@ -135,6 +143,63 @@ function HandleOptionEditSelectProvince() {
         SetDataSelectCity(selected, "#edit-select-city")
     }
 }
+document.querySelector("#dialogEditOpenEntrance").addEventListener('click', function () {
+    dialogTimeEditEntranceHour.toggle();
+});
+document.querySelector("#inputEditEntranceHour").addEventListener('onOk', function () {
+    this.value = dialogTimeEditEntranceHour.time.set({second:0}).format('HH:mm:ss');
+});
+document.querySelector("#dialogEditOpenExit").addEventListener('click', function () {
+    dialogTimeEditExitHour.toggle();
+});
+document.querySelector("#inputEditExitHour").addEventListener('onOk', function () {
+    this.value = dialogTimeEditExitHour.time.set({second:0}).format('HH:mm:ss');
+});
+document.querySelector("#editBranchOffice").addEventListener('click', function () {
+    const editBranchOffice = {
+        id: document.querySelector("#inputEditId").value,
+        city: selectEditCity.selected(),
+        province: selectEditProvince.selected(),
+        address: document.querySelector("#inputEditAddress").value,
+        checkInTime: document.querySelector("#inputEditEntranceHour").value,
+        exitTime: document.querySelector("#inputEditExitHour").value
+    }
+    // remove info errors
+    Object.keys(editBranchOffice).forEach(value => {
+        if (value !== 'id') {
+            document.querySelector(`#errorEdit${capitalize(value)}`).textContent = null;
+        }
+    });
+    // show Loadin
+    document.querySelector("#loadingEdit").classList.remove("uk-hidden");
+    axios({
+        method: "PUT",
+        url: '/api/branch_office/',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: editBranchOffice
+    })
+        .then(() => location.reload())
+        .catch(error => {
+            const infoError = error.response;
+            if (infoError.status === 400) {
+                const errorData = infoError.data;
+                if (Object.keys(errorData).includes("errors")) {
+                    for (const customError of errorData.errors) {
+                        const setError = document.querySelector(`#errorEdit${capitalize(customError.Key)}`);
+                        setError.textContent = customError.Value;
+                    }
+                }
+                if (Object.keys(errorData).includes("message")) {
+                    const setError = document.querySelector(`#messageEdit`);
+                    setError.textContent = errorData.message;
+                }
+            }
+            // quit loading
+            document.querySelector("#loadingEdit").classList.add("uk-hidden");
+        })
+});
 // load page
 window.addEventListener('load',function () {
     branchOffice = location.pathname.split("/").filter(value => value.length > 0)[0];

@@ -134,3 +134,30 @@ func ApiGet(ctx iris.Context) {
 	ctx.JSON(paginate)
 	return
 }
+func ApiPut(ctx iris.Context)  {
+	var validatorBranchOffice model.BranchOfficeValidator
+	err := ctx.ReadJSON(&validatorBranchOffice)
+	if err != nil {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(iris.Map{"message": err.Error()})
+		return
+	}
+	existError := validatorBranchOffice.Validate()
+	if len(existError) > 0 {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(iris.Map{"errors": existError})
+		return
+	}
+	id, _ := strconv.ParseUint(validatorBranchOffice.Id, 10, 64)
+	var branchOffice = model.BranchOffice{ Id: id, City: validatorBranchOffice.City, Province: validatorBranchOffice.Province,
+		Address: validatorBranchOffice.Address, CheckInTime: validatorBranchOffice.CheckInTime, ExitTime: validatorBranchOffice.ExitTime}
+	err = branchOffice.Update()
+	if err != nil {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(iris.Map{"message": err.Error()})
+		return
+	}
+	ctx.StatusCode(iris.StatusCreated)
+	ctx.JSON(iris.Map{"data": branchOffice})
+	return
+}
