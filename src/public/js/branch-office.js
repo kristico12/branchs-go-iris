@@ -35,7 +35,38 @@ function DeleteRows() {
 function ClearError() {
     showError.innerHTML = "";
 }
-
+function GetDataTable(i) {
+    const row = tbody.rows.item(i);
+    let editBranchOffice = {};
+    for (const j in row.cells) {
+        const cell = row.cells[j];
+        if (cell.nodeName === "TD" && cell.textContent.length > 0) {
+            switch (j) {
+                case "0":
+                    editBranchOffice.id = cell.textContent;
+                    break;
+                case "1":
+                    editBranchOffice.city = cell.textContent;
+                    break;
+                case "2":
+                    editBranchOffice.province = cell.textContent;
+                    break;
+                case "3":
+                    editBranchOffice.address = cell.textContent;
+                    break;
+                case "4":
+                    editBranchOffice.checkInTime = cell.textContent;
+                    break;
+                case "5":
+                    editBranchOffice.exitTime = cell.textContent;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return editBranchOffice;
+}
 function Call() {
     // axios
     axios.get('/api/branch_office/', {
@@ -56,7 +87,7 @@ function Call() {
             }
             row.insertCell(thead.length - 1).innerHTML = '<div class="uk-flex uk-flex-around">' +
                 '<i uk-toggle="target: #modal-edit-branch-Office" class="icon" uk-icon="icon: pencil; ratio: 1.3" onclick="OpenEdit(\''+i+'\')"></i>' +
-                '<i class="icon" uk-icon="icon: minus-circle; ratio: 1.3"></i>' +
+                '<i class="icon" uk-icon="icon: minus-circle; ratio: 1.3" onclick="DeleteBranch(\''+i+'\')"></i>' +
                 '</div>';
         });
         CreatePaginate(data);
@@ -100,35 +131,7 @@ const dialogTimeEditExitHour = new mdDateTimePicker.default({
     trigger: document.querySelector("#inputEditExitHour")
 });
 function OpenEdit(i) {
-    const row = tbody.rows.item(i);
-    let editBranchOffice = {};
-    for (const j in row.cells) {
-        const cell = row.cells[j];
-        if (cell.nodeName === "TD" && cell.textContent.length > 0) {
-            switch (j) {
-                case "0":
-                    editBranchOffice.id = cell.textContent;
-                    break;
-                case "1":
-                    editBranchOffice.city = cell.textContent;
-                    break;
-                case "2":
-                    editBranchOffice.province = cell.textContent;
-                    break;
-                case "3":
-                    editBranchOffice.address = cell.textContent;
-                    break;
-                case "4":
-                    editBranchOffice.checkInTime = cell.textContent;
-                    break;
-                case "5":
-                    editBranchOffice.exitTime = cell.textContent;
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+    let editBranchOffice = Object.assign({},GetDataTable(i));
     // send info to panel edit
     document.querySelector("#inputEditId").value = editBranchOffice.id;
     SetDataSelectProvince("#edit-select-province");
@@ -180,7 +183,15 @@ document.querySelector("#editBranchOffice").addEventListener('click', function (
         },
         data: editBranchOffice
     })
-        .then(() => location.reload())
+        .then(() => {
+            DeleteRows();
+            ClearError();
+            Call();
+            // quit loading
+            document.querySelector("#loadingEdit").classList.add("uk-hidden");
+            // close modal
+            UIkit.modal("#modal-edit-branch-Office").hide();
+        })
         .catch(error => {
             const infoError = error.response;
             if (infoError.status === 400) {
@@ -200,6 +211,36 @@ document.querySelector("#editBranchOffice").addEventListener('click', function (
             document.querySelector("#loadingEdit").classList.add("uk-hidden");
         })
 });
+//------------------------------------------ code for Delete branch ----------------------------------------------------|
+function DeleteBranch(i) {
+    let deleteBranchOffice = Object.assign({},GetDataTable(i));
+    deleteBranchOffice.id = parseInt(deleteBranchOffice.id);
+    // clear message error
+    showError.innerHTML = "";
+    UIkit.modal.confirm("Esta seguro que desea eliminar a "+deleteBranchOffice.address+" en "+deleteBranchOffice.city)
+        .then(function () {
+            axios({
+                method: "DELETE",
+                url: '/api/branch_office/',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: deleteBranchOffice
+            })
+                .then(() => {
+                    DeleteRows();
+                    ClearError();
+                    Call();
+                })
+                .catch(error => {
+                    if (error.response.data.message) {
+                        showError.innerHTML = error.response.data.message;
+                    } else {
+                        showError.innerHTML = "A ocurrido un error Intente mas tarde";
+                    }
+                })
+        },function () {});
+}
 // load page
 window.addEventListener('load',function () {
     branchOffice = location.pathname.split("/").filter(value => value.length > 0)[0];

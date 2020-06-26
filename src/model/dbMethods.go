@@ -54,6 +54,17 @@ func (self BranchOffice) Update() error {
 	if err != nil { return err }
 	return nil
 }
+//------------------------------- all methods DELETE --------------------------------------------|
+func (self BranchOffice) Delete() error {
+	Db, err := ConnectionDatabase()
+	if err != nil { return err }
+	tx := Db.MustBegin()
+	tx.NamedExec("DELETE FROM branch_office WHERE id=:id",self)
+	err = tx.Commit()
+	defer Db.Close()
+	if err != nil { return err }
+	return nil
+}
 //-------------------------------- all methods Filter -------------------------------------------|
 func (self BranchOffice) Filter(where string, args ...interface{}) ([]BranchOffice, error) {
 	var result []BranchOffice

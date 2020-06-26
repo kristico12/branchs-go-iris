@@ -157,7 +157,25 @@ func ApiPut(ctx iris.Context)  {
 		ctx.JSON(iris.Map{"message": err.Error()})
 		return
 	}
-	ctx.StatusCode(iris.StatusCreated)
+	ctx.StatusCode(iris.StatusOK)
+	ctx.JSON(iris.Map{"data": branchOffice})
+	return
+}
+func ApiDelete(ctx iris.Context) {
+	var branchOffice model.BranchOffice
+	err := ctx.ReadJSON(&branchOffice)
+	if err != nil {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(iris.Map{"message": err.Error()})
+		return
+	}
+	err = branchOffice.Delete()
+	if err != nil {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(iris.Map{"message": err.Error()})
+		return
+	}
+	ctx.StatusCode(iris.StatusOK)
 	ctx.JSON(iris.Map{"data": branchOffice})
 	return
 }
