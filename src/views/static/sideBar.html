@@ -29,6 +29,12 @@
                 </a>
             </li>
             {% endif %}
+            {% if "all" in permission or "permission" in permission %}
+            <li><a href="{{urlHome}}/permission">
+                    <span data-uk-icon="icon: tag" class="uk-margin-small-right"></span>Permisos
+                </a>
+            </li>
+            {% endif %}
         </ul>
     </div>
     <div class="bar-bottom background-dashboard-color-max">

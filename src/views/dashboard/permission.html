@@ -1,0 +1,36 @@
+{% extends "scalarfootDashboard.html" %}
+{% block main %}
+<main class="mdl-layout__content mdl-color--grey-100">
+    <div class="mdl-grid demo-content">
+        <div class="uk-grid uk-grid-medium" data-uk-grid>
+            <div class="uk-width-1-1@l">
+                <div class="uk-card uk-card-default uk-card-small uk-card-hover">
+                    <div class="uk-card-header">
+                        <div class="uk-grid uk-grid-small">
+                            <div class="uk-width-auto"><h4>Listado</h4></div>
+                        </div>
+                    </div>
+                    <div class="uk-card-body uk-overflow-auto">
+                        <table class="uk-table uk-table-responsive uk-table-striped uk-table-hover"
+                               id="tablePermission">
+                            <thead>
+                            <tr>
+                                {% for attr in listAttributes %}
+                                <td id="{{attr.Key}}">{{attr.Value}}</td>
+                                {% endfor %}
+                                <td>Opciones</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+{% block js %}
+<script src="/public/js/permission.js"></script>
+{% endblock %}

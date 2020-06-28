@@ -14,6 +14,7 @@ import (
 var provinceCityColombia []utils.ProviceCityColombiaApi
 
 type PermissionValidator struct {
+	Id string `json:"id"`
 	Name string `json:"name" validate:"required,min=3,max=100"`
 }
 type RoleValidator struct {

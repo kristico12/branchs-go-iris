@@ -75,6 +75,18 @@ func (self BranchOffice) Filter(where string, args ...interface{}) ([]BranchOffi
 	if err != nil { return nil, err }
 	return result, nil
 }
+func (self Permission) Filter(where string, args ...interface{}) ([]Permission, error) {
+	fmt.Println(where)
+	fmt.Println(args...)
+	var result []Permission
+	Db, err := ConnectionDatabase()
+	if err != nil { return nil, err }
+	err = Db.Select(&result, fmt.Sprintf("SELECT * FROM permission %s", where), args...)
+	defer Db.Close()
+	if err != nil { return nil, err }
+	return result, nil
+}
+
 //------------------------------- all Filter IN -----------------------------------------------------|
 func (self BranchOffice) In(filterIn string, args ...interface{}) ([]BranchOffice, error) {
 	var (
@@ -120,6 +132,15 @@ func (self UserAuth) Select(customQuery string, args ...interface{}) ([]string, 
 	return result, nil
 }
 func (self BranchOffice) Select(customQuery string, args ...interface{}) ([]string, error) {
+	var result []string
+	Db, err := ConnectionDatabase()
+	if err != nil { return nil, err }
+	err = Db.Select(&result, customQuery, args...)
+	defer Db.Close()
+	if err != nil { return nil, err }
+	return result, nil
+}
+func (self Permission) Select(customQuery string, args ...interface{}) ([]string, error) {
 	var result []string
 	Db, err := ConnectionDatabase()
 	if err != nil { return nil, err }

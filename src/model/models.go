@@ -96,8 +96,8 @@ CREATE TABLE IF NOT EXISTS "employee_appointment" (
 )`
 
 type Permission struct {
-	Id uint64 `db:"id"`
-	Name string `db:"name"`
+	Id uint64 `db:"id" json:"id"`
+	Name string `db:"name" json:"name"`
 }
 type Role struct {
 	Id uint64 `db:"id"`

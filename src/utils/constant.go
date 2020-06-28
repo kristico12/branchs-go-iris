@@ -14,10 +14,12 @@ const ContentTypeJson = "application/json"
 var privateKey, _ = LoadEnvironmentEnv("ENCODE_TOKEN")
 // ------------------ cookie name -----------------------|
 var CookieName, _ = LoadEnvironmentEnv("COKIE_NAME")
-//------------------ list attributes for BranchOffices ---------------|
+//------------------ list attributes for Model ---------------|
 var ListAttributesBranchOfficess = []CustomMessage{
 	{"","Id" }, {"","Ciudad"}, {"","Provincia"},
 	{"","Direccion"}, {"","Hora Entrada"}, {"","Hora Salida"}}
+var ListAttributesPermission = []CustomMessage{
+	{"","Id" }, {"","Nombre"}}
 
 //------------------ NumberForPage ----------------|
 const NumberForPage = uint32(7)
