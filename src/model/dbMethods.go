@@ -76,8 +76,6 @@ func (self BranchOffice) Filter(where string, args ...interface{}) ([]BranchOffi
 	return result, nil
 }
 func (self Permission) Filter(where string, args ...interface{}) ([]Permission, error) {
-	fmt.Println(where)
-	fmt.Println(args...)
 	var result []Permission
 	Db, err := ConnectionDatabase()
 	if err != nil { return nil, err }

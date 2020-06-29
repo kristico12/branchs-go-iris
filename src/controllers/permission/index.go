@@ -49,14 +49,27 @@ func ApiGet(ctx iris.Context) {
 		paginate.Page = uint32(1)
 	}
 	paginate.NumberForPage = utils.NumberForPage
-	result, err := permission.Filter("$1 ORDER BY $2 OFFSET $3 ROWS FETCH FIRST $4 ROW ONLY",filter,titleOrder+" "+orderAscDesc,
-		(paginate.Page*paginate.NumberForPage)-paginate.NumberForPage, paginate.NumberForPage)
-	if err != nil {
+	// count filtered
+	if count, err := permission.Select(fmt.Sprintf("SELECT count(*) FROM permission %s",filter)); err != nil {
+		ctx.StatusCode(iris.StatusInternalServerError)
+		ctx.JSON(iris.Map{"message": err.Error()})
+		return
+	} else {
+		if count, err := strconv.Atoi(count[0]); err != nil {
+			ctx.StatusCode(iris.StatusInternalServerError)
+			ctx.JSON(iris.Map{"message": err.Error()})
+			return
+		} else {
+			paginate.Filtered = uint32(count)
+		}
+	}
+	if paginate.Data, err = permission.Filter(fmt.Sprintf("%s ORDER BY $1 OFFSET $2 ROWS FETCH FIRST $3 ROW ONLY", filter),titleOrder+" "+orderAscDesc,
+		(paginate.Page*paginate.NumberForPage)-paginate.NumberForPage, paginate.NumberForPage); err != nil {
 		ctx.StatusCode(iris.StatusInternalServerError)
 		ctx.JSON(iris.Map{"message": err.Error()})
 		return
 	}
 	ctx.StatusCode(iris.StatusOK)
-	ctx.JSON(result)
+	ctx.JSON(paginate)
 	return
 }
