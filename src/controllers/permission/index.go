@@ -73,3 +73,24 @@ func ApiGet(ctx iris.Context) {
 	ctx.JSON(paginate)
 	return
 }
+func ApiPost(ctx iris.Context) {
+	var permissionValidator model.PermissionValidator
+	var err error
+	ctx.ReadJSON(&permissionValidator)
+	existError := permissionValidator.Validate()
+	if len(existError) > 0 {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(iris.Map{"errors": existError})
+		return
+	}
+	var permission = model.Permission{Name: permissionValidator.Name}
+	err = permission.Save()
+	if err != nil {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(iris.Map{"message": err.Error()})
+		return
+	}
+	ctx.StatusCode(iris.StatusCreated)
+	ctx.JSON(iris.Map{"data": permission})
+	return
+}

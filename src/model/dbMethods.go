@@ -26,6 +26,16 @@ func (self *BranchOffice) Save() error  {
 	if err != nil { return err }
 	return nil
 }
+func (self *Permission) Save() error {
+	Db, err := ConnectionDatabase()
+	if err != nil { return err }
+	tx := Db.MustBegin()
+	tx.NamedExec("INSERT INTO permission (name) VALUES (:name)",self)
+	err = tx.Commit()
+	defer Db.Close()
+	if err != nil { return err }
+	return nil
+}
 //-------------------------------- all methods GET ----------------------------------------|
 func (self *UserAuth) Get(where string, args ...interface{}) error {
 	Db, err := ConnectionDatabase()
@@ -44,7 +54,7 @@ func (self *BranchOffice) Get(where string, args ...interface{}) error {
 	return nil
 }
 //-------------------------------- all methods UPDATE ------------------------------------------|
-func (self BranchOffice) Update() error {
+func (self *BranchOffice) Update() error {
 	Db, err := ConnectionDatabase()
 	if err != nil { return err }
 	tx := Db.MustBegin()

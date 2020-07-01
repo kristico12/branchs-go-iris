@@ -21,9 +21,6 @@ const dialogTimeExitHour = new mdDateTimePicker.default({
     type: 'time',
     trigger: document.querySelector("#inputExitHour")
 });
-function capitalize(word) {
-    return word[0].toUpperCase() + word.slice(1);
-}
 //------------------- functions -----------------------------------|
 function SetValuesAllCities(values) {
     for (const key of values) {

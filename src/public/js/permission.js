@@ -6,11 +6,30 @@ let filter;
 const table = document.querySelector("#tablePermission");
 const thead = table.querySelectorAll("thead td");
 const tbody = table.querySelector("tbody");
+function CreatePaginate(info) {
+    pagination = new tui.Pagination(document.querySelector("#pagination"), {
+        totalItems: info.Filtered,
+        itemsPerPage: info.NumberForPage,
+        page: info.Page,
+        visiblePages: 3,
+        centerAlign: true
+    });
+    // event pagination
+    pagination.on('beforeMove', function (e) {
+        page = e.page;
+        DeleteRows();
+        ClearError();
+        Call();
+    });
+}
 function DeleteRows() {
     const max = tbody.rows.length;
     for (let i = 0; i < max; i++) {
         tbody.deleteRow(0);
     }
+}
+function ClearError() {
+    document.querySelector("#errorList").innerHTML = "";
 }
 function Call() {
     // axios
@@ -34,6 +53,7 @@ function Call() {
                 '<i class="icon" uk-icon="icon: minus-circle; ratio: 1.3" onclick="DeleteBranch(\''+i+'\')"></i>' +
                 '</div>';
         });
+        CreatePaginate(data);
     }).catch(error => {
         if (error.response.data.message) {
             document.querySelector("#errorList").innerHTML = error.response.data.message;
@@ -42,6 +62,46 @@ function Call() {
         }
     })
 }
+//------------------------------------------------- Save Permission ------------------------------------------------------|
+document.querySelector("#savePermission").addEventListener('click', function () {
+    const permission = {
+        name: document.querySelector("#inputName").value
+    }
+    // remove info errors
+    Object.keys(permission).forEach(value => {
+        if (value !== 'id') {
+            document.querySelector(`#error${capitalize(value)}`).textContent = null;
+        }
+    });
+    // show Loadin
+    document.querySelector("#loading").classList.remove("uk-hidden");
+    axios({
+        method: "POST",
+        url: '/api/permission/',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: permission
+    })
+        .then(() => location.reload())
+        .catch(error => {
+            const infoErrorPermission = error.response;
+            if (infoErrorPermission.status === 400) {
+                const errorData = infoErrorPermission.data;
+                if (Object.keys(errorData).includes("errors")) {
+                    for (const customError of errorData.errors) {
+                        const setError = document.querySelector(`#error${capitalize(customError.Key)}`);
+                        setError.textContent = customError.Value;
+                    }
+                }
+                if (Object.keys(errorData).includes("message")) {
+                    const setError = document.querySelector(`#message`);
+                    setError.textContent = errorData.message;
+                }
+            }
+            document.querySelector("#loading").classList.add("uk-hidden");
+        })
+})
 // load page
 window.addEventListener('load',function () {
     DeleteRows();

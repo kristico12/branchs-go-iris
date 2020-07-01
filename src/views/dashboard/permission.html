@@ -24,7 +24,31 @@
                             <tbody>
                             </tbody>
                         </table>
+                        <div id="pagination" class="tui-pagination"></div>
                         <span class="uk-text-danger" id="errorList"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-1-1@l">
+                <div class="uk-card uk-card-default uk-card-small uk-card-hover">
+                    <div class="uk-card-header">
+                        <div class="uk-width-auto"><h4>Agregar</h4></div>
+                    </div>
+                    <div class="uk-card-body uk-overflow-auto">
+                        <form>
+                            <fieldset class="uk-fieldset">
+                                <div class="uk-margin">
+                                    <input class="uk-input" type="text" placeholder="Nombre" id="inputName"/>
+                                    <span class="uk-text-danger" id="errorName"></span>
+                                </div>
+                            </fieldset>
+                        </form>
+                        <span class="uk-text-danger" id="message"></span>
+                        <p class="uk-text-right">
+                            <button class="uk-button uk-button-primary" type="button" id="savePermission">Save
+                            </button>
+                            <span id="loading" class="uk-hidden" uk-spinner></span>
+                        </p>
                     </div>
                 </div>
             </div>
