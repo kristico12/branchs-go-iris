@@ -50,7 +50,7 @@ function Call() {
             }
             row.insertCell(thead.length - 1).innerHTML = '<div class="uk-flex uk-flex-around">' +
                 '<i uk-toggle="target: #modal-edit-branch-Office" class="icon" uk-icon="icon: pencil; ratio: 1.3" onclick="OpenEdit(\''+i+'\')"></i>' +
-                '<i class="icon" uk-icon="icon: minus-circle; ratio: 1.3" onclick="DeleteBranch(\''+i+'\')"></i>' +
+                '<i class="icon" uk-icon="icon: minus-circle; ratio: 1.3" onclick="Delete(\''+i+'\')"></i>' +
                 '</div>';
         });
         CreatePaginate(data);
@@ -102,6 +102,57 @@ document.querySelector("#savePermission").addEventListener('click', function () 
             document.querySelector("#loading").classList.add("uk-hidden");
         })
 })
+//---------------------------------------------- Delete Permission ---------------------------------------------------|
+function GetDataTable(i) {
+    const row = tbody.rows.item(i);
+    let permission = {};
+    for (const j in row.cells) {
+        const cell = row.cells[j];
+        if (cell.nodeName === "TD" && cell.textContent.length > 0) {
+            switch (j) {
+                case "0":
+                    permission.id = cell.textContent;
+                    break;
+                case "1":
+                    permission.name = cell.textContent;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return permission;
+}
+function Delete(i) {
+    let deletePermission = Object.assign({},GetDataTable(i));
+    deletePermission.id = parseInt(deletePermission.id);
+    // clear message error
+    ClearError();
+    UIkit.modal.confirm("Esta seguro que desea eliminar a "+deletePermission.name)
+        .then(function () {
+            axios({
+                method: "DELETE",
+                url: '/api/permission/',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                data: deletePermission
+            })
+                .then(() => {
+                    page = 1;
+                    DeleteRows();
+                    ClearError();
+                    Call();
+                })
+                .catch(error => {
+                    if (error.response.data.message) {
+                        document.querySelector("#errorList").innerHTML = error.response.data.message;
+                    } else {
+                        document.querySelector("#errorList").innerHTML = "A ocurrido un error Intente mas tarde";
+                    }
+                })
+        },function () {});
+}
 // load page
 window.addEventListener('load',function () {
     DeleteRows();

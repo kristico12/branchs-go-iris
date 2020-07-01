@@ -94,3 +94,21 @@ func ApiPost(ctx iris.Context) {
 	ctx.JSON(iris.Map{"data": permission})
 	return
 }
+func ApiDelete(ctx iris.Context) {
+	var permission model.Permission
+	err := ctx.ReadJSON(&permission)
+	if err != nil {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(iris.Map{"message": err.Error()})
+		return
+	}
+	err = permission.Delete()
+	if err != nil {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(iris.Map{"message": err.Error()})
+		return
+	}
+	ctx.StatusCode(iris.StatusOK)
+	ctx.JSON(iris.Map{"data": permission})
+	return
+}

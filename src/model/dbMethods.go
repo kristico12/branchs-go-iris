@@ -75,6 +75,16 @@ func (self BranchOffice) Delete() error {
 	if err != nil { return err }
 	return nil
 }
+func (self Permission) Delete() error {
+	Db, err := ConnectionDatabase()
+	if err != nil { return err }
+	tx := Db.MustBegin()
+	tx.NamedExec("DELETE FROM permission WHERE id=:id",self)
+	err = tx.Commit()
+	defer Db.Close()
+	if err != nil { return err }
+	return nil
+}
 //-------------------------------- all methods Filter -------------------------------------------|
 func (self BranchOffice) Filter(where string, args ...interface{}) ([]BranchOffice, error) {
 	var result []BranchOffice

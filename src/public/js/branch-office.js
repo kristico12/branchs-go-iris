@@ -228,6 +228,7 @@ function DeleteBranch(i) {
                 data: deleteBranchOffice
             })
                 .then(() => {
+                    page = 1;
                     DeleteRows();
                     ClearError();
                     Call();
