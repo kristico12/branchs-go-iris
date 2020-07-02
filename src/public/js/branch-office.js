@@ -167,6 +167,8 @@ document.querySelector("#editBranchOffice").addEventListener('click', function (
         checkInTime: document.querySelector("#inputEditEntranceHour").value,
         exitTime: document.querySelector("#inputEditExitHour").value
     }
+    // remove error geenral
+    document.querySelector(`#messageEdit`).textContent = "";
     // remove info errors
     Object.keys(editBranchOffice).forEach(value => {
         if (value !== 'id') {

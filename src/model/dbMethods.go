@@ -64,6 +64,16 @@ func (self *BranchOffice) Update() error {
 	if err != nil { return err }
 	return nil
 }
+func (self *Permission) Update() error {
+	Db, err := ConnectionDatabase()
+	if err != nil { return err }
+	tx := Db.MustBegin()
+	tx.NamedExec("UPDATE permission SET name=:name WHERE id=:id",self)
+	err = tx.Commit()
+	defer Db.Close()
+	if err != nil { return err }
+	return nil
+}
 //------------------------------- all methods DELETE --------------------------------------------|
 func (self BranchOffice) Delete() error {
 	Db, err := ConnectionDatabase()

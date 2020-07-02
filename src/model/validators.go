@@ -15,7 +15,7 @@ var provinceCityColombia []utils.ProviceCityColombiaApi
 
 type PermissionValidator struct {
 	Id string `json:"id"`
-	Name string `json:"name" validate:"required,min=3,max=100"`
+	Name string `json:"name" validate:"required,min=3,max=100,existSpacing"`
 }
 type RoleValidator struct {
 	Name        string `json:"name" validate:"required,min=3,max=30"`
@@ -122,6 +122,14 @@ func customInvalidCodeCity(fl validator.FieldLevel) bool {
 	}
 	return isValid
 }
+func existSpacing(fl validator.FieldLevel) bool {
+	var isValid = false
+	var i = strings.Index(fl.Field().String(), " ")
+	if i == -1 {
+		isValid = true
+	}
+	return isValid
+}
 
 //-------------- interfaces validator ------------------------------------|
 type ValidatorsInfo interface {
@@ -140,8 +148,9 @@ func validate(err interface{}) []utils.CustomMessage {
 }
 
 func (self PermissionValidator) Validate() []utils.CustomMessage {
-	err := validator.New().Struct(self)
-	return validate(err)
+	v := validator.New()
+	_ = v.RegisterValidation("existSpacing", existSpacing)
+	return validate(v.Struct(self))
 }
 func (self UserAuthValidator) Validate() []utils.CustomMessage {
 	err := validator.New().Struct(self)

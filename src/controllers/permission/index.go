@@ -112,3 +112,25 @@ func ApiDelete(ctx iris.Context) {
 	ctx.JSON(iris.Map{"data": permission})
 	return
 }
+func ApiPut(ctx iris.Context) {
+	var permissionValidator model.PermissionValidator
+	var err error
+	ctx.ReadJSON(&permissionValidator)
+	existError := permissionValidator.Validate()
+	if len(existError) > 0 {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(iris.Map{"errors": existError})
+		return
+	}
+	id, _ := strconv.ParseUint(permissionValidator.Id, 10, 64)
+	var permission = model.Permission{Id: id, Name: permissionValidator.Name }
+	err = permission.Update()
+	if err != nil {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(iris.Map{"message": err.Error()})
+		return
+	}
+	ctx.StatusCode(iris.StatusOK)
+	ctx.JSON(iris.Map{"data": permission})
+	return
+}

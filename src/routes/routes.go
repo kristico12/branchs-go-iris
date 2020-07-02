@@ -43,5 +43,6 @@ func Routes() *iris.Application {
 	routeApiPermission.Get("/", permission.ApiGet)
 	routeApiPermission.Post("/", permission.ApiPost)
 	routeApiPermission.Delete("/", permission.ApiDelete)
+	routeApiPermission.Put("/", permission.ApiPut)
 	return app
 }

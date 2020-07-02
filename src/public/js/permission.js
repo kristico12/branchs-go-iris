@@ -49,7 +49,7 @@ function Call() {
                 row.insertCell(j).innerHTML = value[keyDate[j]];
             }
             row.insertCell(thead.length - 1).innerHTML = '<div class="uk-flex uk-flex-around">' +
-                '<i uk-toggle="target: #modal-edit-branch-Office" class="icon" uk-icon="icon: pencil; ratio: 1.3" onclick="OpenEdit(\''+i+'\')"></i>' +
+                '<i uk-toggle="target: #modal-edit-permission" class="icon" uk-icon="icon: pencil; ratio: 1.3" onclick="OpenEdit(\''+i+'\')"></i>' +
                 '<i class="icon" uk-icon="icon: minus-circle; ratio: 1.3" onclick="Delete(\''+i+'\')"></i>' +
                 '</div>';
         });
@@ -153,6 +153,63 @@ function Delete(i) {
                 })
         },function () {});
 }
+//----------------------------------------------- Edit Permission -------------------------------------------------------|
+function OpenEdit(i) {
+    let editPermission = Object.assign({},GetDataTable(i));
+    document.querySelector("#inputEditId").value = editPermission.id;
+    document.querySelector("#inputEditName").value = editPermission.name;
+}
+document.querySelector("#editPermission").addEventListener('click', function () {
+    const editPermission = {
+        id: document.querySelector("#inputEditId").value,
+        name: document.querySelector("#inputEditName").value,
+    }
+    // remove error geenral
+    document.querySelector(`#messageEdit`).textContent = "";
+    // remove info errors
+    Object.keys(editPermission).forEach(value => {
+        if (value !== 'id') {
+            document.querySelector(`#errorEdit${capitalize(value)}`).textContent = null;
+        }
+    });
+    // show Loadin
+    document.querySelector("#loadingEdit").classList.remove("uk-hidden");
+    axios({
+        method: "PUT",
+        url: '/api/permission/',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: editPermission
+    })
+        .then(() => {
+            DeleteRows();
+            ClearError();
+            Call();
+            // quit loading
+            document.querySelector("#loadingEdit").classList.add("uk-hidden");
+            // close modal
+            UIkit.modal("#modal-edit-permission").hide();
+        })
+        .catch(error => {
+            const infoError = error.response;
+            if (infoError.status === 400) {
+                const errorData = infoError.data;
+                if (Object.keys(errorData).includes("errors")) {
+                    for (const customError of errorData.errors) {
+                        const setError = document.querySelector(`#errorEdit${capitalize(customError.Key)}`);
+                        setError.textContent = customError.Value;
+                    }
+                }
+                if (Object.keys(errorData).includes("message")) {
+                    const setError = document.querySelector(`#messageEdit`);
+                    setError.textContent = errorData.message;
+                }
+            }
+            // quit loading
+            document.querySelector("#loadingEdit").classList.add("uk-hidden");
+        })
+})
 // load page
 window.addEventListener('load',function () {
     DeleteRows();
