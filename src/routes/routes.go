@@ -8,6 +8,7 @@ import (
 	"go-return/src/controllers/login"
 	"go-return/src/controllers/middlewares"
 	"go-return/src/controllers/permission"
+	"go-return/src/controllers/role"
 )
 
 
@@ -20,6 +21,7 @@ func Routes() *iris.Application {
 	dashboard.Get("/",home.IndexGet)
 	dashboard.Get("/branch_office", middlewares.IsPermision,branch_office.IndexDashboardGet)
 	dashboard.Get("/permission", middlewares.IsPermision,permission.IndexGet)
+	dashboard.Get("/role", middlewares.IsPermision,role.IndexGet)
 	//login
 	routeLogin := app.Party("/login", middlewares.NotAuth)
 	routeLogin.Get("/", login.IndexGet)

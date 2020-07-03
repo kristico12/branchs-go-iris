@@ -21,11 +21,11 @@
                 </ul>
             </li>-->
         </ul>
-        <ul class="uk-nav uk-nav-default uk-nav-parent-icon left-content-box uk-margin-top">
+        <ul class="uk-nav uk-nav-default uk-nav-parent-icon left-content-box uk-margin-top" data-uk-nav>
             <li class="uk-nav-header">ADMIN</li>
             {% if "all" in permission or "branch_office" in permission %}
             <li><a href="{{urlHome}}/branch_office">
-                    <span data-uk-icon="icon: users" class="uk-margin-small-right"></span>Oficinas
+                    <span data-uk-icon="icon: location" class="uk-margin-small-right"></span>Oficinas
                 </a>
             </li>
             {% endif %}
@@ -33,6 +33,14 @@
             <li><a href="{{urlHome}}/permission">
                     <span data-uk-icon="icon: tag" class="uk-margin-small-right"></span>Permisos
                 </a>
+            </li>
+            {% endif %}
+            {% if "all" in permission or "role" in permission %}
+            <li class="uk-parent"><a href=""><span data-uk-icon="icon: users" class="uk-margin-small-right"></span>Roles</a>
+                <ul class="uk-nav-sub">
+                    <li><a title="Rol" href="{{urlHome}}/role">Rol</a></li>
+                    <li><a title="Permisos" href="{{urlHome}}/role/permission">Permisos</a></li>
+                </ul>
             </li>
             {% endif %}
         </ul>
