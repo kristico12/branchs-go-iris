@@ -36,6 +36,16 @@ func (self *Permission) Save() error {
 	if err != nil { return err }
 	return nil
 }
+func (self *Role) Save() error {
+	Db, err := ConnectionDatabase()
+	if err != nil { return err }
+	tx := Db.MustBegin()
+	tx.NamedExec("INSERT INTO role (name, description) VALUES (:name, :description)",self)
+	err = tx.Commit()
+	defer Db.Close()
+	if err != nil { return err }
+	return nil
+}
 //-------------------------------- all methods GET ----------------------------------------|
 func (self *UserAuth) Get(where string, args ...interface{}) error {
 	Db, err := ConnectionDatabase()
@@ -114,6 +124,15 @@ func (self Permission) Filter(where string, args ...interface{}) ([]Permission, 
 	if err != nil { return nil, err }
 	return result, nil
 }
+func (self Role) Filter(where string, args ...interface{}) ([]Role, error) {
+	var result []Role
+	Db, err := ConnectionDatabase()
+	if err != nil { return nil, err }
+	err = Db.Select(&result, fmt.Sprintf("SELECT * FROM role %s", where), args...)
+	defer Db.Close()
+	if err != nil { return nil, err }
+	return result, nil
+}
 
 //------------------------------- all Filter IN -----------------------------------------------------|
 func (self BranchOffice) In(filterIn string, args ...interface{}) ([]BranchOffice, error) {
@@ -150,7 +169,7 @@ func (self BranchOffice) In(filterIn string, args ...interface{}) ([]BranchOffic
 	return result, nil
 }
 //------------------------------- all methods CustomQuerys -----------------------------------------------|
-func (self UserAuth) Select(customQuery string, args ...interface{}) ([]string, error) {
+func customSelect(customQuery string, args ...interface{}) ([]string, error) {
 	var result []string
 	Db, err := ConnectionDatabase()
 	if err != nil { return nil, err }
@@ -158,22 +177,16 @@ func (self UserAuth) Select(customQuery string, args ...interface{}) ([]string, 
 	defer Db.Close()
 	if err != nil { return nil, err }
 	return result, nil
+}
+func (self UserAuth) Select(customQuery string, args ...interface{}) ([]string, error) {
+	return customSelect(customQuery, args...)
 }
 func (self BranchOffice) Select(customQuery string, args ...interface{}) ([]string, error) {
-	var result []string
-	Db, err := ConnectionDatabase()
-	if err != nil { return nil, err }
-	err = Db.Select(&result, customQuery, args...)
-	defer Db.Close()
-	if err != nil { return nil, err }
-	return result, nil
+	return customSelect(customQuery, args...)
 }
 func (self Permission) Select(customQuery string, args ...interface{}) ([]string, error) {
-	var result []string
-	Db, err := ConnectionDatabase()
-	if err != nil { return nil, err }
-	err = Db.Select(&result, customQuery, args...)
-	defer Db.Close()
-	if err != nil { return nil, err }
-	return result, nil
+	return customSelect(customQuery, args...)
+}
+func (self Role) Select(customQuery string, args ...interface{}) ([]string, error) {
+	return customSelect(customQuery, args...)
 }

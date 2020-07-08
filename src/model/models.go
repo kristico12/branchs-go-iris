@@ -100,9 +100,9 @@ type Permission struct {
 	Name string `db:"name" json:"name"`
 }
 type Role struct {
-	Id uint64 `db:"id"`
-	Name string `db:"name"`
-	Description sql.NullString `db:"description"`
+	Id uint64 `db:"id" json:"id"`
+	Name string `db:"name" json:"name"`
+	Description sql.NullString `db:"description" json:"description"`
 }
 type PermissionRole struct {
 	Id uint64 `db:"id"`

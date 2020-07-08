@@ -58,7 +58,7 @@ func IsPermision(ctx iris.Context) {
 		if contentType == "application/json" {
 			ctx.JSON(iris.Map{"message": err.Error()})
 		} else {
-			ctx.Request().URL.Query().Set("error", err.Error())
+			ctx.URLParamDefault("error", err.Error())
 		}
 		return
 	}
@@ -108,7 +108,7 @@ func IsValidBranchOffice(ctx iris.Context) {
 			if contentType == "application/json" {
 				ctx.JSON(iris.Map{"message": err.Error()})
 			} else {
-				ctx.Request().URL.Query().Set("error", err.Error())
+				ctx.URLParamDefault("error", err.Error())
 			}
 			return
 		}

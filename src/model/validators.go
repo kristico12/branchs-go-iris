@@ -18,12 +18,9 @@ type PermissionValidator struct {
 	Name string `json:"name" validate:"required,min=3,max=100,existSpacing"`
 }
 type RoleValidator struct {
-	Name        string `json:"name" validate:"required,min=3,max=30"`
+	Id uint64 `json:"id"`
+	Name        string `json:"name" validate:"required,min=3,max=30,existSpacing"`
 	Description string `json:"description" validate:"max=400"`
-}
-type PermissionRoleValidator struct {
-	IdPermission []*PermissionValidator `json:"idPermission" validate:"required,dive,required"`
-	IdRole       []*RoleValidator       `json:"idRole" validate:"required,dive,required"`
 }
 type UserAuthValidator struct {
 	Username string         `json:"userName" validate:"required,min=5,max=30"`
@@ -148,6 +145,11 @@ func validate(err interface{}) []utils.CustomMessage {
 }
 
 func (self PermissionValidator) Validate() []utils.CustomMessage {
+	v := validator.New()
+	_ = v.RegisterValidation("existSpacing", existSpacing)
+	return validate(v.Struct(self))
+}
+func (self RoleValidator) Validate() []utils.CustomMessage {
 	v := validator.New()
 	_ = v.RegisterValidation("existSpacing", existSpacing)
 	return validate(v.Struct(self))

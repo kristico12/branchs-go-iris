@@ -62,6 +62,17 @@ function Call() {
         }
     })
 }
+// order by
+table.querySelector("thead tr").addEventListener('click', function (e) {
+    if (e.target.id !== "") {
+        page = 1;
+        titleOrder = e.target.id;
+        orderAscDesc = orderAscDesc === "ASC" ? "DESC" : "ASC";
+        DeleteRows();
+        ClearError();
+        Call();
+    }
+});
 //------------------------------------------------- Save Permission ------------------------------------------------------|
 document.querySelector("#savePermission").addEventListener('click', function () {
     const permission = {

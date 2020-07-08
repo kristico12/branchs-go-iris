@@ -20,6 +20,8 @@ var ListAttributesBranchOfficess = []CustomMessage{
 	{"","Direccion"}, {"","Hora Entrada"}, {"","Hora Salida"}}
 var ListAttributesPermission = []CustomMessage{
 	{"","Id" }, {"","Nombre"}}
+var ListAttributesRoles = []CustomMessage{
+	{"","Id" }, {"","Nombre"}, {"", "Descripcion"}}
 
 //------------------ NumberForPage ----------------|
 const NumberForPage = uint32(7)

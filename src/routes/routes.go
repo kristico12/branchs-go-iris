@@ -46,5 +46,9 @@ func Routes() *iris.Application {
 	routeApiPermission.Post("/", permission.ApiPost)
 	routeApiPermission.Delete("/", permission.ApiDelete)
 	routeApiPermission.Put("/", permission.ApiPut)
+	// route for roles
+	routeApiRole := routeApi.Party("/role", middlewares.IsPermision)
+	routeApiRole.Get("/", role.ApiGet)
+	routeApiRole.Post("/", role.ApiPost)
 	return app
 }

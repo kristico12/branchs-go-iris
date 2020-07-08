@@ -2,7 +2,67 @@
 {% block main %}
 <main class="mdl-layout__content mdl-color--grey-100">
     <div class="mdl-grid demo-content">
+        <div class="uk-grid uk-grid-medium" data-uk-grid>
+            <div class="uk-width-1-1@l">
+                <div class="uk-card uk-card-default uk-card-small uk-card-hover">
+                    <div class="uk-card-header">
+                        <div class="uk-grid uk-grid-small">
+                            <div class="uk-width-auto"><h4>Listado</h4></div>
+                        </div>
+                    </div>
+                    <div class="uk-card-body uk-overflow-auto">
+                        <table class="uk-table uk-table-responsive uk-table-striped uk-table-hover"
+                               id="tableRole">
+                            <thead>
+                            <tr>
+                                {% for attr in listAttributes %}
+                                <td id="{{attr.Key}}">{{attr.Value}}</td>
+                                {% endfor %}
+                                <td>Opciones</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div id="pagination" class="tui-pagination"></div>
+                        <span class="uk-text-danger" id="errorList"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-width-1-1@l">
+                <div class="uk-card uk-card-default uk-card-small uk-card-hover">
+                    <div class="uk-card-header">
+                        <div class="uk-width-auto"><h4>Agregar</h4></div>
+                    </div>
+                    <div class="uk-card-body uk-overflow-auto">
+                        <form>
+                            <fieldset class="uk-fieldset">
+                                <div class="uk-margin">
+                                    <input class="uk-input" type="text" placeholder="Nombre" id="inputName"/>
+                                    <span class="uk-text-danger" id="errorName"></span>
+                                </div>
+                            </fieldset>
+                            <fieldset class="uk-fieldset">
+                                <div class="uk-margin">
+                                    <textarea class="uk-textarea" rows="5" placeholder="Descripcion" id="inputDescription"></textarea>
+                                    <span class="uk-text-danger" id="errorDescription"></span>
+                                </div>
+                            </fieldset>
+                        </form>
+                        <span class="uk-text-danger" id="message"></span>
+                        <p class="uk-text-right">
+                            <button class="uk-button uk-button-primary" type="button" id="saveRole">Save
+                            </button>
+                            <span id="loading" class="uk-hidden" uk-spinner></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
+{% endblock %}
+{% block js %}
+<script src="/public/js/role.js"></script>
 {% endblock %}
 
