@@ -84,6 +84,16 @@ func (self *Permission) Update() error {
 	if err != nil { return err }
 	return nil
 }
+func (self *Role) Update() error {
+	Db, err := ConnectionDatabase()
+	if err != nil { return err }
+	tx := Db.MustBegin()
+	tx.NamedExec("UPDATE role SET name=:name, description=:description WHERE id=:id",self)
+	err = tx.Commit()
+	defer Db.Close()
+	if err != nil { return err }
+	return nil
+}
 //------------------------------- all methods DELETE --------------------------------------------|
 func (self BranchOffice) Delete() error {
 	Db, err := ConnectionDatabase()

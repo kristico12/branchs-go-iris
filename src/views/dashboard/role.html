@@ -61,6 +61,33 @@
         </div>
     </div>
 </main>
+<!-- This is the modal -->
+<div id="modal-edit-role" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Editar</h2>
+        <form>
+            <fieldset class="uk-fieldset">
+                <div class="uk-margin">
+                    <input class="uk-input" type="number" placeholder="Id" id="inputEditId" disabled/>
+                </div>
+                <div class="uk-margin">
+                    <input class="uk-input" type="text" placeholder="Nombre" id="inputEditName"/>
+                    <span class="uk-text-danger" id="errorEditName"></span>
+                </div>
+                <div class="uk-margin">
+                    <textarea class="uk-textarea" rows="5" placeholder="Descripcion" id="inputEditDescription"></textarea>
+                    <span class="uk-text-danger" id="errorEditDescription"></span>
+                </div>
+            </fieldset>
+        </form>
+        <span class="uk-text-danger" id="messageEdit"></span>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+            <button class="uk-button uk-button-primary" type="button" id="editRole">Save</button>
+            <span id="loadingEdit" class="uk-hidden" uk-spinner></span>
+        </p>
+    </div>
+</div>
 {% endblock %}
 {% block js %}
 <script src="/public/js/role.js"></script>

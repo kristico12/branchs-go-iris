@@ -53,7 +53,7 @@ function Call() {
                 }
             }
             row.insertCell(thead.length - 1).innerHTML = '<div class="uk-flex uk-flex-around">' +
-                '<i uk-toggle="target: #modal-edit-permission" class="icon" uk-icon="icon: pencil; ratio: 1.3"></i>' +
+                '<i uk-toggle="target: #modal-edit-role" class="icon" uk-icon="icon: pencil; ratio: 1.3" onclick="OpenEdit(\''+i+'\')"></i>' +
                 '<i class="icon" uk-icon="icon: minus-circle; ratio: 1.3"></i>' +
                 '</div>';
         });
@@ -116,6 +116,36 @@ document.querySelector("#saveRole").addEventListener('click', function () {
             document.querySelector("#loading").classList.add("uk-hidden");
         })
 })
+//--------------------------------------------- update role ---------------------------------------------------------------|
+function GetDataTable(i) {
+    const row = tbody.rows.item(i);
+    let role = {};
+    for (const j in row.cells) {
+        const cell = row.cells[j];
+        if (cell.nodeName === "TD") {
+            switch (j) {
+                case "0":
+                    role.id = cell.textContent;
+                    break;
+                case "1":
+                    role.name = cell.textContent;
+                    break;
+                case "2":
+                    role.description = cell.textContent;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return role;
+}
+function OpenEdit(i) {
+    let editRole = Object.assign({},GetDataTable(i));
+    document.querySelector("#inputEditId").value = editRole.id;
+    document.querySelector("#inputEditName").value = editRole.name;
+    document.querySelector("#inputEditDescription").value = editRole.description;
+}
 // load page
 window.addEventListener('load',function () {
     DeleteRows();
