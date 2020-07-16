@@ -146,6 +146,58 @@ function OpenEdit(i) {
     document.querySelector("#inputEditName").value = editRole.name;
     document.querySelector("#inputEditDescription").value = editRole.description;
 }
+document.querySelector("#editRole").addEventListener('click', function () {
+    const editRole = {
+        id: parseInt(document.querySelector("#inputEditId").value),
+        name: document.querySelector("#inputEditName").value,
+        description: document.querySelector("#inputEditDescription").value,
+    }
+    // remove error general
+    document.querySelector(`#messageEdit`).textContent = "";
+    // remove info errors
+    Object.keys(editRole).forEach(value => {
+        if (value !== 'id') {
+            document.querySelector(`#errorEdit${capitalize(value)}`).textContent = null;
+        }
+    });
+    // show Loadin
+    document.querySelector("#loadingEdit").classList.remove("uk-hidden");
+    axios({
+        method: "PUT",
+        url: '/api/role/',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: editRole
+    })
+        .then(() => {
+            DeleteRows();
+            ClearError();
+            Call();
+            // quit loading
+            document.querySelector("#loadingEdit").classList.add("uk-hidden");
+            // close modal
+            UIkit.modal("#modal-edit-role").hide();
+        })
+        .catch(error => {
+            const infoError = error.response;
+            if (infoError.status === 400) {
+                const errorData = infoError.data;
+                if (Object.keys(errorData).includes("errors")) {
+                    for (const customError of errorData.errors) {
+                        const setError = document.querySelector(`#errorEdit${capitalize(customError.Key)}`);
+                        setError.textContent = customError.Value;
+                    }
+                }
+                if (Object.keys(errorData).includes("message")) {
+                    const setError = document.querySelector(`#messageEdit`);
+                    setError.textContent = errorData.message;
+                }
+            }
+            // quit loading
+            document.querySelector("#loadingEdit").classList.add("uk-hidden");
+        })
+})
 // load page
 window.addEventListener('load',function () {
     DeleteRows();
